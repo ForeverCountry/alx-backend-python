@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "python-generators-0x00"
+version = "0.1.0"
+description = ""
+authors = ["ForeverCountry <40751841+ForeverCountry@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+mysql-connector-python = "^9.1.0"
+uuid = "^1.30"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
