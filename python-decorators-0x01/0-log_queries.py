@@ -1,14 +1,14 @@
+from datetime import datetime
 import sqlite3
 import functools
-
-#### decorator to lof SQL queries
 
 
 def log_queries(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         query = args[0] if args else kwargs.get("query")
-        print(f"Executing query: {query}")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{timestamp}] Executing query: {query}")
 
         return func(*args, **kwargs)
 
@@ -25,6 +25,6 @@ def fetch_all_users(query):
     return results
 
 
-#### fetch users while logging the query
+# Fetch users while logging the query
 query = "SELECT * FROM users"
 users = fetch_all_users(query=query)
