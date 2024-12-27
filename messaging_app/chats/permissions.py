@@ -1,12 +1,12 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import BasePermission
 
 
-class IsOwnerOrReadOnly(BasePermission):
+class IsParticipantOfConversation(BasePermission):
     """
     Custom permission to allow only owners of an object to edit it.
     """
 
     def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
+        if request.user in obj.participants.all():
             return True
-        return obj.user == request.user
+        return False
