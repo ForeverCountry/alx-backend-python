@@ -8,7 +8,7 @@ from .serializers import ConversationSerializer, MessageSerializer
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsOwnerOrReadOnly]
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ["created_at"]
 
@@ -23,6 +23,9 @@ class ConversationViewSet(viewsets.ModelViewSet):
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
+
+    def get_queryset(self):
+        return Conversation.objects.filter(user=self.request.user)
 
 
 class MessageViewSet(viewsets.ModelViewSet):
