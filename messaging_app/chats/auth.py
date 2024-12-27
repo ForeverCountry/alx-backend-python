@@ -1,9 +1,6 @@
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    """
-    Custom view to obtain JWT access and refresh tokens.
-    """
-
-    pass
+def get_token_pair(user):
+    refresh = RefreshToken.for_user(user)
+    return {"access": str(refresh.access_token), "refresh": str(refresh)}

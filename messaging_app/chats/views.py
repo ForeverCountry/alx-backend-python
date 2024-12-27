@@ -3,12 +3,13 @@ from rest_framework.response import Response
 from rest_framework import filters
 from .models import Conversation, Message
 from .serializers import ConversationSerializer, MessageSerializer
+from .permissions import IsOwnerOrReadOnly
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
-    permission_classes = [permissions.IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ["created_at"]
 

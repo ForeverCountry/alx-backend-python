@@ -1,8 +1,7 @@
-"""
-URL configuration for messaging_app project.
+"""messaging_app URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
+    https://docs.djangoproject.com/en/4.1/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -18,20 +17,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
     TokenRefreshView,
 )
-from messaging_app.chats.auth import CustomTokenObtainPairView
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("chats.urls")),
+    path("api-auth/", include("chats.urls")),
     path(
-        "api/token/",
-        CustomTokenObtainPairView.as_view(),
-        name="token_obtain_pair",
+        "api/token/", TokenObtainPairView.as_view(), name="token-obtain-pain"
     ),
     path(
-        "api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
+        "api/token/refresh", TokenRefreshView.as_view(), name="token-refresh"
     ),
-    path("api/chats/", include("messaging_app.chats.urls")),
 ]
