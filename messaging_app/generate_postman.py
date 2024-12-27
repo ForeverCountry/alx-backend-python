@@ -115,7 +115,7 @@ postman_collection = {
 }
 
 # Write the Postman collection to a JSON file
-with open("messaging_app/post_man-Collections", "w") as file:
+with open("post_man-Collections", "w") as file:
     json.dump(postman_collection, file, indent=4)
 
-print("Postman collection file created: messaging_app/post_man-Collections")
+print("Postman collection file created: post_man-Collections")
