@@ -3,7 +3,7 @@ services:
     build:
       context: ./messaging_app
     container_name: messaging_app
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python3 manage.py runserver
     volumes:
       - .:/app
     ports:
