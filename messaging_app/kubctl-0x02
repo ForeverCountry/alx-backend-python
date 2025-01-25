@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# Script to perform blue-green deployment with Kubernetes
+
+# Function to deploy blue version
+deploy_blue() {
+    echo "Deploying Blue version..."
+    kubectl apply -f blue_deployment.yaml
+    kubectl apply -f kubeservice.yaml
+}
+
+# Function to deploy green version
+deploy_green() {
+    echo "Deploying Green version..."
+    kubectl apply -f green_deployment.yaml
+}
+
+# Function to monitor logs for green deployment
+monitor_green_logs() {
+    echo "Monitoring logs for Green version..."
+    POD_NAME=$(kubectl get pods -l app=django-messaging-app,version=green -o jsonpath='{.items[0].metadata.name}')
+    kubectl logs $POD_NAME
+}
+
+# Deploy Blue version
+deploy_blue
+echo "Blue version deployed."
+
+# Deploy Green version
+deploy_green
+echo "Green version deployed."
+
+# Monitor logs for Green version
+monitor_green_logs
+
+# Instructions for switching traffic
+echo "To switch traffic to the Green version, update the 'kubeservice.yaml' selector to:"
+echo "    version: green"
+echo "Then apply the changes using:"
+echo "    kubectl apply -f kubeservice.yaml"
