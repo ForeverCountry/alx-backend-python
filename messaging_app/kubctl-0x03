@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+# Script to perform a rolling update with zero downtime and monitor progress
+
+# Function to apply the updated deployment file and trigger rolling update
+apply_rolling_update() {
+    echo "Applying the updated deployment file (blue version 2.0)..."
+    kubectl apply -f blue_deployment.yaml
+    echo "Rolling update initiated."
+}
+
+# Function to monitor the rollout status
+monitor_rollout_status() {
+    echo "Monitoring the rollout progress..."
+    kubectl rollout status deployment/django-messaging-app-blue
+}
+
+# Function to check for downtime using curl
+check_downtime() {
+    echo "Checking for downtime..."
+    while true; do
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/api/)
+        if [ "$STATUS" -eq 200 ]; then
+            echo "App is up and running, received status code: $STATUS"
+        else
+            echo "App is down, received status code: $STATUS"
+        fi
+        sleep 1
+    done
+}
+
+# Function to verify the update is complete and check the pods
+verify_update_complete() {
+    echo "Verifying if the update is complete..."
+    kubectl get pods -l app=django-messaging-app,version=blue
+    kubectl get deployments
+}
+
+# Main script execution
+apply_rolling_update
+monitor_rollout_status &
+check_downtime &
+wait # Wait for the background processes to complete
+
+verify_update_complete
+
+echo "Rolling update and downtime check completed successfully."
