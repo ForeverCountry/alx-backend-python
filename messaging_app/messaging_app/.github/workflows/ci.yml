@@ -39,10 +39,16 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          python3 -m pip3 install --upgrade pip3
+          python3 -m pip install --upgrade pip
           pip3 install -r messaging_app/requirements.txt
+          pip3 install flake8 coverage
 
-      - name: Run Django Tests
+      - name: Run Flake8 Linting
+        run: |
+          flake8 messaging_app
+        continue-on-error: false
+
+      - name: Run Django Tests with Coverage
         env:
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
@@ -50,6 +56,12 @@ jobs:
           DB_USER: test_user
           DB_PASSWORD: test_password
         run: |
-          python manage.py makemigrations
-          python manage.py migrate
-          python manage.py test
+          coverage run --source=messaging_app manage.py test
+          coverage report
+
+      - name: Upload Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.xml
