@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+# Script to set up and use Kubernetes locally with Minikube
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Ensure Minikube is installed
+if ! command_exists minikube; then
+    echo "Minikube is not installed. Please install it and try again."
+    exit 1
+fi
+
+# Ensure kubectl is installed
+if ! command_exists kubectl; then
+    echo "kubectl is not installed. Please install it and try again."
+    exit 1
+fi
+
+# Start Minikube
+echo "Starting Minikube..."
+minikube start
+
+# Verify Minikube is running
+if [ $? -ne 0 ]; then
+    echo "Failed to start Minikube. Please check the logs for more details."
+    exit 1
+fi
+
+echo "Minikube started successfully."
+
+# Verify the Kubernetes cluster is running
+echo "Verifying the Kubernetes cluster..."
+kubectl cluster-info
+
+if [ $? -ne 0 ]; then
+    echo "Failed to verify the Kubernetes cluster. Please ensure Minikube is running."
+    exit 1
+fi
+
+echo "Kubernetes cluster is running."
+
+# Retrieve available pods
+echo "Retrieving available pods..."
+kubectl get pods --all-namespaces
+
+if [ $? -ne 0 ]; then
+    echo "Failed to retrieve pods. Please check the cluster configuration."
+    exit 1
+fi
+
+echo "Available pods retrieved successfully."
+
+echo "Kubernetes cluster setup and verification complete."
