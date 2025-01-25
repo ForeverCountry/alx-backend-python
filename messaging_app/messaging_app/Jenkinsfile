@@ -5,12 +5,12 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git credentialsId: 'my-credentials-id', url: 'https://github.com/ForeverCountry/alx-backend-python.git'
+                git branch: 'main', credentialsId: 'my-credentials-id', url: 'https://github.com/ForeverCountry/alx-backend-python.git'
             }
         }
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r messaging_app/requirements.txt'
+                sh 'pip3 install -r messaging_app/requirements.txt'
             }
         }
         stage('Run Tests') {
